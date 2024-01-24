@@ -3,6 +3,7 @@ import 'package:messager/core/utils/date_time_formater.dart';
 import 'package:messager/core/utils/m_colors.dart';
 import 'package:messager/core/utils/m_text_styles.dart';
 import 'package:messager/data/model/response/category_response_model.dart';
+import 'package:messager/features/messages/messages_list/messages_view.dart';
 
 class MessageCategoryWidget extends StatelessWidget {
   const MessageCategoryWidget({super.key, required this.categorye});
@@ -15,7 +16,12 @@ class MessageCategoryWidget extends StatelessWidget {
       focusColor: Colors.transparent,
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MessagesView(categorye: categorye)));
+      },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

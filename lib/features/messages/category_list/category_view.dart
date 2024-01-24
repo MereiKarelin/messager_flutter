@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:messager/core/utils/m_colors.dart';
 import 'package:messager/core/utils/m_text_styles.dart';
+import 'package:messager/core/utils/route_settings.dart';
+import 'package:messager/core/utils/routes.dart';
 import 'package:messager/core/widgets/category_search_widget.dart';
 import 'package:messager/core/widgets/message_category_widget.dart';
 import 'package:messager/data/model/response/category_response_model.dart';
 
-class CategoryView extends StatelessWidget {
+class CategoryView extends StatelessWidget implements Navigable {
   CategoryView({super.key});
 
   final MessageCategoryModel messageCategoryModel = MessageCategoryModel(
@@ -75,4 +77,7 @@ class CategoryView extends StatelessWidget {
       ),
     );
   }
+
+  @override
+  String getName() => Routes.messageCategoryes;
 }
