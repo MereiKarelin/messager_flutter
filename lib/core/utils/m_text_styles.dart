@@ -9,6 +9,13 @@ class MTextStyles {
     color: MColors.leagingTextColor,
   );
 
+  static const TextStyle whiteLeadingTextStyle = TextStyle(
+    fontSize: 20,
+    fontWeight: FontWeight.w700,
+    fontFamily: 'Gilroy',
+    color: MColors.whiteTextColor,
+  );
+
   static const TextStyle primaryTextStyle = TextStyle(
     fontSize: 15,
     fontWeight: FontWeight.w600,
@@ -28,5 +35,12 @@ class MTextStyles {
     fontWeight: FontWeight.w500,
     fontFamily: 'Gilroy',
     color: MColors.leagingTextColor,
+  );
+
+  static const TextStyle grayTextStyle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Gilroy',
+    color: MColors.grayTextColor,
   );
 }
