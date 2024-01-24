@@ -10,70 +10,73 @@ class MessagesBottomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          height: 1,
-          color: MColors.primaryColor,
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 55),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                height: 47,
-                width: 47,
-                decoration: BoxDecoration(
-                  color: MColors.primaryColor,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Center(
-                  child: SvgPicture.asset('assets/icons/svg/attach.svg'),
-                ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Expanded(
-                child: Container(
+    return Container(
+      color: Colors.white,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            height: 1,
+            color: MColors.primaryColor,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
                   height: 47,
+                  width: 47,
                   decoration: BoxDecoration(
                     color: MColors.primaryColor,
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: TextField(
-                      textAlign: TextAlign.left,
-                      textAlignVertical: TextAlignVertical.bottom,
-                      decoration: InputDecoration(
-                          hintText: 'Сообщение',
-                          hintStyle: MTextStyles.grayTextStyle,
-                          border: InputBorder.none),
+                  child: Center(
+                    child: SvgPicture.asset('assets/icons/svg/attach.svg'),
+                  ),
+                ),
+                const SizedBox(
+                  width: 8,
+                ),
+                Expanded(
+                  child: Container(
+                    height: 47,
+                    decoration: BoxDecoration(
+                      color: MColors.primaryColor,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child: TextField(
+                        textAlign: TextAlign.left,
+                        textAlignVertical: TextAlignVertical.bottom,
+                        decoration: InputDecoration(
+                            hintText: 'Сообщение',
+                            hintStyle: MTextStyles.grayTextStyle,
+                            border: InputBorder.none),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Container(
-                height: 47,
-                width: 47,
-                decoration: BoxDecoration(
-                  color: MColors.primaryColor,
-                  borderRadius: BorderRadius.circular(12),
+                const SizedBox(
+                  width: 8,
                 ),
-                child: Center(
-                  child: SvgPicture.asset('assets/icons/svg/voice.svg'),
-                ),
-              )
-            ],
-          ),
-        )
-      ],
+                Container(
+                  height: 47,
+                  width: 47,
+                  decoration: BoxDecoration(
+                    color: MColors.primaryColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Center(
+                    child: SvgPicture.asset('assets/icons/svg/voice.svg'),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 }

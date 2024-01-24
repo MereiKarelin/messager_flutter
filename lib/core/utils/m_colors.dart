@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class MColors {
   static const Color primaryColor = Color.fromRGBO(237, 242, 246, 1);
   static const Color backgroundColor = Colors.white;
+  static const Color greenColor = Color.fromRGBO(60, 237, 120, 1);
 
   static const Color leagingTextColor = Color.fromRGBO(43, 51, 62, 1);
   static const Color primaryTextColor = Color.fromRGBO(0, 0, 0, 1);

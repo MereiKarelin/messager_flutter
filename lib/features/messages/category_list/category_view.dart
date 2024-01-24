@@ -42,6 +42,7 @@ class CategoryView extends StatelessWidget implements Navigable {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: MColors.backgroundColor,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(130),
         child: Column(

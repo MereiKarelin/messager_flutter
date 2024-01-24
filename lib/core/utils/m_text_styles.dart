@@ -37,6 +37,13 @@ class MTextStyles {
     color: MColors.leagingTextColor,
   );
 
+  static const TextStyle messageTextStyle = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w500,
+    fontFamily: 'Gilroy',
+    color: MColors.primaryTextColor,
+  );
+
   static const TextStyle grayTextStyle = TextStyle(
     fontSize: 18,
     fontWeight: FontWeight.w500,
