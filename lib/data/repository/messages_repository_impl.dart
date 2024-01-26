@@ -25,4 +25,8 @@ class MessageRepositoryImpl implements MessageRepository {
   @override
   Future<MessagesModel> sendMessage(String uid, String message) async =>
       await messageLocalDataSource.sendMessage(uid, message);
+
+  @override
+  Future<MessageCategoryModel> getCategoryListByParams(String params) async =>
+      await messageLocalDataSource.getCategoryListByParams(params);
 }

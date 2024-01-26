@@ -7,6 +7,7 @@ abstract class MessageLocalDataSource {
   Future<MessageCategoryModel> getCategoryList();
   Future<MessagesModel> getMessagesList(String uid);
   Future<MessagesModel> sendMessage(String uid, String message);
+  Future<MessageCategoryModel> getCategoryListByParams(String params);
 }
 
 @LazySingleton(as: MessageLocalDataSource)
@@ -19,6 +20,20 @@ class MessageLocalDataSourceImpl implements MessageLocalDataSource {
   Future<MessageCategoryModel> getCategoryList() async {
     final db = await _databaseService.database;
     final List<Map<String, dynamic>> maps = await db.query('category');
+    return MessageCategoryModel(
+        categoryes:
+            List<Categorye>.from(maps.map((map) => Categorye.fromJson(map))));
+  }
+
+  @override
+  Future<MessageCategoryModel> getCategoryListByParams(String params) async {
+    final db = await _databaseService.database;
+
+    // Выбираем категории, у которых firstname или lastname содержит заданный параметр
+    final List<Map<String, dynamic>> maps = await db.rawQuery(
+        'SELECT * FROM category WHERE firstname LIKE ? OR lastname LIKE ?',
+        ['%$params%', '%$params%']);
+
     return MessageCategoryModel(
         categoryes:
             List<Categorye>.from(maps.map((map) => Categorye.fromJson(map))));

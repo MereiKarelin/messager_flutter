@@ -5,4 +5,5 @@ abstract class MessageRepository {
   Future<MessageCategoryModel> getCategoryList();
   Future<MessagesModel> getMessagesList(String uid);
   Future<MessagesModel> sendMessage(String uid, String message);
+  Future<MessageCategoryModel> getCategoryListByParams(String params);
 }

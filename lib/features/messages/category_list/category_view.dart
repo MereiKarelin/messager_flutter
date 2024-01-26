@@ -35,9 +35,9 @@ class CategoryView extends StatelessWidget implements Navigable {
                   style: MTextStyles.leadingTextStyle,
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 20),
-                child: CategorySearchWidget(),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
+                child: CategorySearchWidget(categoryBloc: _categoryBloc),
               ),
               Container(
                 height: 1,

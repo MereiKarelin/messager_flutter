@@ -5,4 +5,7 @@ sealed class CategoryEvent {}
 
 class CategoryStartEvent extends CategoryEvent {}
 
-class CategorySearchEvent extends CategoryEvent {}
+class CategorySearchEvent extends CategoryEvent {
+  final String params;
+  CategorySearchEvent({required this.params});
+}
