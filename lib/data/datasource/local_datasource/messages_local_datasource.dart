@@ -6,7 +6,8 @@ import 'package:messager/data/model/response/messages_response_model.dart';
 
 abstract class MessageLocalDataSource {
   Future<MessageCategoryModel> getCategoryList();
-  Future<MessagesModel> getMessagesList();
+  Future<MessagesModel> getMessagesList(String uid);
+  Future<MessagesModel> sendMessage(String uid, String message);
 }
 
 @LazySingleton(as: MessageLocalDataSource)
@@ -45,7 +46,7 @@ class MessageLocalDataSourceImpl implements MessageLocalDataSource {
     return messageCategoryModel;
   }
 
-  Future<MessagesModel> getMessagesList() async {
+  Future<MessagesModel> getMessagesList(String uid) async {
     const String jsonString = '''
   {
     "messages": [
@@ -55,7 +56,33 @@ class MessageLocalDataSourceImpl implements MessageLocalDataSource {
         "uid": "user1"
       },
       {
-        "data": "Нормально",
+        "data": "Ептеп, ептеп",
+        "dataTime": 1643084500,
+        "uid": "me"
+      },
+      {
+        "data": "Я в своем познании настолько преисполнился, что я как будто бы уже сто триллионов миллиардов лет проживаю на триллионах и триллионах таких же планет, как эта Земля, мне этот мир абсолютно понятен, и я здесь ищу только одного - покоя, умиротворения и вот этой гармонии, от слияния с бесконечно вечным, от созерцания великого фрактального подобия и от вот этого замечательного всеединства существа, бесконечно вечного, куда ни посмотри, хоть вглубь - бесконечно малое, хоть ввысь - бесконечное большое, понимаешь?",
+        "dataTime": 1643084600,
+        "uid": "user1"
+      }
+    ]
+  }
+  ''';
+
+    return MessagesModel.fromJson(jsonDecode(jsonString));
+  }
+
+  Future<MessagesModel> sendMessage(String uid, String message) async {
+    const String jsonString = '''
+  {
+    "messages": [
+      {
+        "data": "Привет! как ты?",
+        "dataTime": 1643084400,
+        "uid": "user1"
+      },
+      {
+        "data": "Ептеп, ептеп",
         "dataTime": 1643084500,
         "uid": "me"
       },

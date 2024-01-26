@@ -15,13 +15,15 @@ import 'package:messager/data/datasource/local_datasource/messages_local_datasou
 import 'package:messager/data/repository/messages_repository_impl.dart' as _i5;
 import 'package:messager/domain/repository/messages_repository.dart' as _i4;
 import 'package:messager/domain/use_cases/get_category_list_use_case.dart'
-    as _i6;
-import 'package:messager/domain/use_cases/get_messages_list_use_case.dart'
     as _i7;
-import 'package:messager/features/messages/category_list/bloc/category_bloc.dart'
+import 'package:messager/domain/use_cases/get_messages_list_use_case.dart'
     as _i8;
+import 'package:messager/domain/use_cases/send_message_use_case.dart' as _i6;
+import 'package:messager/features/messages/category_list/bloc/category_bloc.dart'
+    as _i10;
+import 'package:messager/features/messages/messages_list/bloc/messages_bloc.dart'
+    as _i9;
 
-// initializes the registration of main-scope dependencies inside of GetIt
 _i1.GetIt $initGetIt(
   _i1.GetIt get, {
   String? environment,
@@ -36,11 +38,17 @@ _i1.GetIt $initGetIt(
       () => _i3.MessageLocalDataSourceImpl());
   gh.lazySingleton<_i4.MessageRepository>(() => _i5.MessageRepositoryImpl(
       messageLocalDataSource: gh<_i3.MessageLocalDataSource>()));
-  gh.lazySingleton<_i6.GetCategoryListUseCase>(() =>
-      _i6.GetCategoryListUseCase(repository: gh<_i4.MessageRepository>()));
-  gh.lazySingleton<_i7.GetMessagesListUseCase>(() =>
-      _i7.GetMessagesListUseCase(repository: gh<_i4.MessageRepository>()));
-  gh.factory<_i8.CategoryBloc>(() => _i8.CategoryBloc(
-      getCategoryListUseCase: gh<_i6.GetCategoryListUseCase>()));
+  gh.lazySingleton<_i6.SendMessageUseCase>(
+      () => _i6.SendMessageUseCase(repository: gh<_i4.MessageRepository>()));
+  gh.lazySingleton<_i7.GetCategoryListUseCase>(() =>
+      _i7.GetCategoryListUseCase(repository: gh<_i4.MessageRepository>()));
+  gh.lazySingleton<_i8.GetMessagesListUseCase>(() =>
+      _i8.GetMessagesListUseCase(repository: gh<_i4.MessageRepository>()));
+  gh.factory<_i9.MessagesBloc>(() => _i9.MessagesBloc(
+        getMessagesListUseCase: gh<_i8.GetMessagesListUseCase>(),
+        sendMessageUseCase: gh<_i6.SendMessageUseCase>(),
+      ));
+  gh.factory<_i10.CategoryBloc>(() => _i10.CategoryBloc(
+      getCategoryListUseCase: gh<_i7.GetCategoryListUseCase>()));
   return get;
 }

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:messager/core/injectable/configurator.dart';
+import 'package:messager/core/utils/m_text_styles.dart';
 import 'package:messager/core/utils/route_settings.dart';
 import 'package:messager/core/utils/routes.dart';
 import 'package:messager/core/widgets/message_container_widget.dart';
 import 'package:messager/data/model/response/category_response_model.dart';
 import 'package:messager/data/model/response/messages_response_model.dart';
+import 'package:messager/features/messages/messages_list/bloc/messages_bloc.dart';
 import 'package:messager/features/messages/messages_list/widgets/messages_app_bar.dart';
 import 'package:messager/features/messages/messages_list/widgets/messages_bottom_app_bar.dart';
 
@@ -19,31 +23,10 @@ class MessagesView extends StatefulWidget implements Navigable {
 }
 
 class _MessagesViewState extends State<MessagesView> {
-  final String jsonString = '''
-  {
-    "messages": [
-      {
-        "data": "Привет! как ты?",
-        "dataTime": 1643084400,
-        "uid": "user1"
-      },
-      {
-        "data": "Нормально",
-        "dataTime": 1643084500,
-        "uid": "me"
-      },
-      {
-        "data": "Я в своем познании настолько преисполнился, что я как будто бы уже сто триллионов миллиардов лет проживаю на триллионах и триллионах таких же планет, как эта Земля, мне этот мир абсолютно понятен, и я здесь ищу только одного - покоя, умиротворения и вот этой гармонии, от слияния с бесконечно вечным, от созерцания великого фрактального подобия и от вот этого замечательного всеединства существа, бесконечно вечного, куда ни посмотри, хоть вглубь - бесконечно малое, хоть ввысь - бесконечное большое, понимаешь?",
-        "dataTime": 1643084600,
-        "uid": "user1"
-      }
-    ]
-  }
-  ''';
+  final _messagesBloc = getIt<MessagesBloc>();
 
   @override
   Widget build(BuildContext context) {
-    MessagesModel messagesModel = messagesModelFromJson(jsonString);
     return Scaffold(
         extendBodyBehindAppBar: true,
         appBar: MessagesAppBar.getAppBar(
@@ -54,14 +37,36 @@ class _MessagesViewState extends State<MessagesView> {
           child: Stack(
             alignment: AlignmentDirectional.bottomCenter,
             children: [
-              ListView.builder(
-                padding: const EdgeInsets.all(16),
-                itemCount: messagesModel.messages?.length,
-                itemBuilder: (context, index) => MessageContainerWidget(
-                  message: messagesModel.messages?[index] ?? Message(),
-                ),
+              BlocProvider(
+                create: (context) => _messagesBloc
+                  ..add(
+                    MessagesStartEvent(uid: widget.categorye.uid ?? ''),
+                  ),
+                child: BlocBuilder<MessagesBloc, MessagesState>(
+                    builder: (context, state) => state is MessagesLoadedState
+                        ? ListView.builder(
+                            padding: const EdgeInsets.all(16),
+                            itemCount: state.messagesList.messages?.length,
+                            itemBuilder: (context, index) =>
+                                MessageContainerWidget(
+                              message: state.messagesList.messages?[index] ??
+                                  Message(),
+                            ),
+                          )
+                        : state is MessagesErrorState
+                            ? const Center(
+                                child: Text(
+                                  "Произошла ошибка, повторите попытку позже",
+                                  style: MTextStyles.leadingTextStyle,
+                                ),
+                              )
+                            : const Center(
+                                child: CircularProgressIndicator(),
+                              )),
               ),
-              const MessagesBottomAppBar(),
+              MessagesBottomAppBar(
+                uid: widget.categorye.uid ?? '',
+              ),
             ],
           ),
         ));
