@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:messager/core/injectable/configurator.dart';
 import 'package:messager/core/utils/m_colors.dart';
 import 'package:messager/core/utils/routes.dart';
 import 'package:messager/data/model/response/category_response_model.dart';
@@ -9,6 +10,7 @@ import 'package:messager/features/messages/messages_list/messages_view.dart';
 //START THIRD DAY
 
 void main() {
+  configureDependencies();
   runApp(const MyApp());
 }
 

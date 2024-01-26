@@ -2,3 +2,7 @@ part of 'category_bloc.dart';
 
 @immutable
 sealed class CategoryEvent {}
+
+class CategoryStartEvent extends CategoryEvent {}
+
+class CategorySearchEvent extends CategoryEvent {}

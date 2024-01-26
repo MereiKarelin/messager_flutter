@@ -17,8 +17,8 @@ class MessageLocalDataSourceImpl implements MessageLocalDataSource {
       categoryes: [
         Categorye(
           uid: "example_uid1",
-          firstname: "John",
-          lastname: "Doe",
+          firstname: "Merei",
+          lastname: "Karelin",
           lastMessage: "Hello, how are you?",
           lastMessageDate: 1643084400,
           lastMessageByMe: true,
