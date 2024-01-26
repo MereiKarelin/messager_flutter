@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:messager/core/injectable/configurator.dart';
+
 import 'package:messager/core/utils/m_colors.dart';
 import 'package:messager/core/utils/m_text_styles.dart';
 import 'package:messager/features/messages/messages_list/bloc/messages_bloc.dart';
 
 class MessagesBottomAppBar extends StatefulWidget {
-  const MessagesBottomAppBar({super.key, required this.uid});
+  const MessagesBottomAppBar(
+      {super.key, required this.messagesBloc, required this.uid});
+  final MessagesBloc messagesBloc;
   final String uid;
 
   @override
@@ -14,7 +16,6 @@ class MessagesBottomAppBar extends StatefulWidget {
 }
 
 class _MessagesBottomAppBarState extends State<MessagesBottomAppBar> {
-  final _messagesBloc = getIt<MessagesBloc>();
   final TextEditingController _controller = TextEditingController();
   bool canSend = false;
 
@@ -86,8 +87,13 @@ class _MessagesBottomAppBarState extends State<MessagesBottomAppBar> {
                 InkWell(
                   onTap: () {
                     if (canSend) {
-                      _messagesBloc.add(MessagesSendEvent(
+                      widget.messagesBloc.add(MessagesSendEvent(
                           uid: widget.uid, message: _controller.text));
+                      _controller.clear();
+                      setState(() {
+                        _controller.clear();
+                        canSend = false;
+                      });
                     }
                   },
                   child: AnimatedContainer(

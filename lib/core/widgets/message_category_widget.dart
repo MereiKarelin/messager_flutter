@@ -3,11 +3,14 @@ import 'package:messager/core/utils/date_time_formater.dart';
 import 'package:messager/core/utils/m_colors.dart';
 import 'package:messager/core/utils/m_text_styles.dart';
 import 'package:messager/data/model/response/category_response_model.dart';
+import 'package:messager/features/messages/category_list/bloc/category_bloc.dart';
 import 'package:messager/features/messages/messages_list/messages_view.dart';
 
 class MessageCategoryWidget extends StatelessWidget {
-  const MessageCategoryWidget({super.key, required this.categorye});
+  const MessageCategoryWidget(
+      {super.key, required this.categorye, required this.categoryBloc});
   final Categorye categorye;
+  final CategoryBloc categoryBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +19,12 @@ class MessageCategoryWidget extends StatelessWidget {
       focusColor: Colors.transparent,
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {
-        Navigator.push(
+      onTap: () async {
+        await Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => MessagesView(categorye: categorye)));
+        categoryBloc.add(CategoryStartEvent());
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -63,7 +67,7 @@ class MessageCategoryWidget extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            categorye.lastMessageByMe ?? false
+                            categorye.lastMessageByMe == 1
                                 ? const Text(
                                     "Вы: ",
                                     style: MTextStyles.thirdTextStyle,

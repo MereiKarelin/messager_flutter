@@ -28,9 +28,12 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
       }
       if (event is MessagesSendEvent) {
         try {
-          final messagesList = await sendMessageUseCase(
+          await sendMessageUseCase(
               SendMessageUseCaseParams(uid: event.uid, message: event.message));
+          final messagesList = await getMessagesListUseCase(
+              GetMessagesListUseCaseParams(uid: event.uid));
           emit(MessagesLoadedState(messagesList: messagesList));
+          // emit(MessagesLoadedState(messagesList: messagesList));
         } catch (err) {
           emit(MessagesErrorState(error: err.toString()));
         }

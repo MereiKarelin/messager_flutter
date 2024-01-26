@@ -45,11 +45,16 @@ class _MessagesViewState extends State<MessagesView> {
                 child: BlocBuilder<MessagesBloc, MessagesState>(
                     builder: (context, state) => state is MessagesLoadedState
                         ? ListView.builder(
-                            padding: const EdgeInsets.all(16),
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
                             itemCount: state.messagesList.messages?.length,
+                            reverse: true,
                             itemBuilder: (context, index) =>
                                 MessageContainerWidget(
-                              message: state.messagesList.messages?[index] ??
+                              message: state.messagesList.messages?[
+                                      ((state.messagesList.messages?.length ??
+                                                  0) -
+                                              1) -
+                                          index] ??
                                   Message(),
                             ),
                           )
@@ -57,7 +62,7 @@ class _MessagesViewState extends State<MessagesView> {
                             ? const Center(
                                 child: Text(
                                   "Произошла ошибка, повторите попытку позже",
-                                  style: MTextStyles.leadingTextStyle,
+                                  style: MTextStyles.primaryTextStyle,
                                 ),
                               )
                             : const Center(
@@ -65,6 +70,7 @@ class _MessagesViewState extends State<MessagesView> {
                               )),
               ),
               MessagesBottomAppBar(
+                messagesBloc: _messagesBloc,
                 uid: widget.categorye.uid ?? '',
               ),
             ],

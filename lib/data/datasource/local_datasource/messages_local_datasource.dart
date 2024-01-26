@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:injectable/injectable.dart';
+import 'package:messager/core/utils/database_service.dart';
 import 'package:messager/data/model/response/category_response_model.dart';
 import 'package:messager/data/model/response/messages_response_model.dart';
 
@@ -12,89 +11,89 @@ abstract class MessageLocalDataSource {
 
 @LazySingleton(as: MessageLocalDataSource)
 class MessageLocalDataSourceImpl implements MessageLocalDataSource {
+  final DatabaseService _databaseService;
+
+  MessageLocalDataSourceImpl(this._databaseService);
+
   @override
   Future<MessageCategoryModel> getCategoryList() async {
-    final MessageCategoryModel messageCategoryModel = MessageCategoryModel(
-      categoryes: [
-        Categorye(
-          uid: "example_uid1",
-          firstname: "Merei",
-          lastname: "Karelin",
-          lastMessage: "Hello, how are you?",
-          lastMessageDate: 1643084400,
-          lastMessageByMe: true,
-        ),
-        Categorye(
-          uid: "example_uid2",
-          firstname: "Jane",
-          lastname: "Doe",
-          lastMessage: "Hi there!",
-          lastMessageDate: 1643084500,
-          lastMessageByMe: false,
-        ),
-        Categorye(
-          uid: "example_uid3",
-          firstname: "Alice",
-          lastname: "Smith",
-          lastMessage: "Good to see you!",
-          lastMessageDate: 1643084600,
-          lastMessageByMe: true,
-        ),
-      ],
-    );
-
-    return messageCategoryModel;
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> maps = await db.query('category');
+    return MessageCategoryModel(
+        categoryes:
+            List<Categorye>.from(maps.map((map) => Categorye.fromJson(map))));
   }
 
+  @override
   Future<MessagesModel> getMessagesList(String uid) async {
-    const String jsonString = '''
-  {
-    "messages": [
-      {
-        "data": "Привет! как ты?",
-        "dataTime": 1643084400,
-        "uid": "user1"
-      },
-      {
-        "data": "Ептеп, ептеп",
-        "dataTime": 1643084500,
-        "uid": "me"
-      },
-      {
-        "data": "Я в своем познании настолько преисполнился, что я как будто бы уже сто триллионов миллиардов лет проживаю на триллионах и триллионах таких же планет, как эта Земля, мне этот мир абсолютно понятен, и я здесь ищу только одного - покоя, умиротворения и вот этой гармонии, от слияния с бесконечно вечным, от созерцания великого фрактального подобия и от вот этого замечательного всеединства существа, бесконечно вечного, куда ни посмотри, хоть вглубь - бесконечно малое, хоть ввысь - бесконечное большое, понимаешь?",
-        "dataTime": 1643084600,
-        "uid": "user1"
-      }
-    ]
-  }
-  ''';
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> maps = await db.query('message',
+        where: 'senderUid = ? OR receiverUid = ?', whereArgs: [uid, uid]);
 
-    return MessagesModel.fromJson(jsonDecode(jsonString));
+    return MessagesModel(
+        messages: List<Message>.from(maps.map((map) => Message.fromJson(map))));
   }
 
+  @override
   Future<MessagesModel> sendMessage(String uid, String message) async {
-    const String jsonString = '''
-  {
-    "messages": [
-      {
-        "data": "Привет! как ты?",
-        "dataTime": 1643084400,
-        "uid": "user1"
-      },
-      {
-        "data": "Ептеп, ептеп",
-        "dataTime": 1643084500,
-        "uid": "me"
-      },
-      {
-        "data": "Я в своем познании настолько преисполнился, что я как будто бы уже сто триллионов миллиардов лет проживаю на триллионах и триллионах таких же планет, как эта Земля, мне этот мир абсолютно понятен, и я здесь ищу только одного - покоя, умиротворения и вот этой гармонии, от слияния с бесконечно вечным, от созерцания великого фрактального подобия и от вот этого замечательного всеединства существа, бесконечно вечного, куда ни посмотри, хоть вглубь - бесконечно малое, хоть ввысь - бесконечное большое, понимаешь?",
-        "dataTime": 1643084600,
-        "uid": "user1"
-      }
-    ]
-  }
-  ''';
+    final db = await _databaseService.database;
+    final currentTime = DateTime.now()
+            .subtract(const Duration(hours: 1))
+            .millisecondsSinceEpoch ~/
+        1000;
+    final messageData = Message(
+        data: message,
+        dataTime: currentTime,
+        uid: 'me',
+        senderUid: uid,
+        receiverUid: 'me');
 
-    return MessagesModel.fromJson(jsonDecode(jsonString));
+    await db.insert('message', messageData.toJson());
+
+    updateCategoryLastMessage(uid, message, currentTime, 1);
+
+    // Получаем обновленный список сообщений после вставки нового
+    final List<Map<String, dynamic>> maps = await db.query('message',
+        where: 'senderUid = ? OR receiverUid = ?', whereArgs: [uid, uid]);
+
+    return MessagesModel(
+        messages: List<Message>.from(maps.map((map) => Message.fromJson(map))));
+  }
+
+  Future<void> updateCategoryLastMessage(String partnerUid, String lastMessage,
+      int lastMessageDate, int lastMessageByMe) async {
+    final db = await _databaseService.database;
+    // Получаем текущую информацию о категории
+    final currentCategory = await getCategoryByUid(partnerUid);
+
+    // Обновляем данные о последнем сообщении
+    final Categorye updatedCategory = Categorye(
+        firstname: currentCategory?.firstname,
+        lastname: currentCategory?.lastname,
+        uid: currentCategory?.uid,
+        lastMessage: lastMessage,
+        lastMessageDate: lastMessageDate,
+        lastMessageByMe: lastMessageByMe);
+
+    await db.update(
+      'category',
+      updatedCategory.toJson(),
+      where: 'uid = ?',
+      whereArgs: [partnerUid],
+    );
+  }
+
+  Future<Categorye?> getCategoryByUid(String uid) async {
+    final db = await _databaseService.database;
+    final List<Map<String, dynamic>> maps =
+        await db.query('category', where: 'uid = ?', whereArgs: [uid]);
+
+    if (maps.isNotEmpty) {
+      // Если найдены данные, возвращаем экземпляр Categorye
+      return Categorye.fromJson(maps.first);
+    } else {
+      // Если ничего не найдено, возвращаем null
+      return null;
+    }
   }
 }

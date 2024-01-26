@@ -38,7 +38,7 @@ class Categorye {
   String? lastname;
   String? lastMessage;
   int? lastMessageDate;
-  bool? lastMessageByMe;
+  int? lastMessageByMe;
 
   Categorye({
     this.uid,

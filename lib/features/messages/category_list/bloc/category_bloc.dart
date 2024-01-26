@@ -20,6 +20,7 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
           final categoryList = await getCategoryListUseCase(NoParams());
           emit(CategoryLoadedState(categoryList: categoryList));
         } catch (err) {
+          print(err);
           emit(CategoryErrorState(error: err.toString()));
         }
       } else if (event is CategorySearchEvent) {}

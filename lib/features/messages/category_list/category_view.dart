@@ -58,6 +58,7 @@ class CategoryView extends StatelessWidget implements Navigable {
                           itemCount: state.categoryList.categoryes?.length,
                           itemBuilder: (context, index) {
                             return MessageCategoryWidget(
+                                categoryBloc: _categoryBloc,
                                 categorye:
                                     state.categoryList.categoryes?[index] ??
                                         Categorye());
@@ -70,7 +71,7 @@ class CategoryView extends StatelessWidget implements Navigable {
                         ? const Center(
                             child: Text(
                               "Произошла ошибка, повторите попытку позже",
-                              style: MTextStyles.leadingTextStyle,
+                              style: MTextStyles.primaryTextStyle,
                             ),
                           )
                         : const Center(

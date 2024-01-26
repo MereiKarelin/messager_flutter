@@ -34,22 +34,24 @@ class Message {
   String? data;
   int? dataTime;
   String? uid;
+  String? senderUid;
+  String? receiverUid;
 
-  Message({
-    this.data,
-    this.dataTime,
-    this.uid,
-  });
+  Message(
+      {this.data, this.dataTime, this.uid, this.senderUid, this.receiverUid});
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
-        data: json["data"],
-        dataTime: json["dataTime"],
-        uid: json["uid"],
-      );
+      data: json["data"],
+      dataTime: json["dataTime"],
+      uid: json["uid"],
+      senderUid: json["senderUid"],
+      receiverUid: json["receiverUid"]);
 
   Map<String, dynamic> toJson() => {
         "data": data,
         "dataTime": dataTime,
         "uid": uid,
+        "senderUid": senderUid,
+        "receiverUid": receiverUid
       };
 }

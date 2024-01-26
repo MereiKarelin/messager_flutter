@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:messager/core/injectable/configurator.dart';
 import 'package:messager/core/utils/date_time_formater.dart';
 import 'package:messager/core/widgets/message_category_widget.dart';
 import 'package:messager/data/model/response/category_response_model.dart';
+import 'package:messager/features/messages/category_list/bloc/category_bloc.dart';
 
 void main() {
   testWidgets('MessageCategoryWidget renders correctly',
       (WidgetTester tester) async {
+    final _categoryBloc = getIt<CategoryBloc>();
     // Create a Categorye instance for testing
     Categorye testCategorye = Categorye(
       uid: 'some_uid',
       firstname: 'John',
       lastname: 'Doe',
       lastMessage: 'Hello, world!',
-      lastMessageByMe: false,
+      lastMessageByMe: 0,
       lastMessageDate: DateTime.now().millisecondsSinceEpoch ~/ 1000,
     );
 
@@ -21,7 +24,8 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: MessageCategoryWidget(categorye: testCategorye),
+          body: MessageCategoryWidget(
+              categoryBloc: _categoryBloc, categorye: testCategorye),
         ),
       ),
     );
