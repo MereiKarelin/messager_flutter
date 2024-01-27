@@ -11,6 +11,7 @@ part 'category_state.dart';
 
 @injectable
 class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
+  String params = '';
   GetCategoryListUseCase getCategoryListUseCase;
   GetCategoryListByParamsUseCase getCategoryListByParamsUseCase;
   CategoryBloc(
@@ -29,9 +30,20 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
         }
       } else if (event is CategorySearchEvent) {
         emit(CategoryLoadingState());
+
         try {
           final categoryList = await getCategoryListByParamsUseCase(
               GetCategoryListByParamsUseCaseParams(params: event.params));
+          emit(CategoryLoadedState(categoryList: categoryList));
+          params = event.params;
+        } catch (err) {
+          print(err);
+          emit(CategoryErrorState(error: err.toString()));
+        }
+      } else if (event is CategoryRefreshEvent) {
+        try {
+          final categoryList = await getCategoryListByParamsUseCase(
+              GetCategoryListByParamsUseCaseParams(params: params));
           emit(CategoryLoadedState(categoryList: categoryList));
         } catch (err) {
           print(err);

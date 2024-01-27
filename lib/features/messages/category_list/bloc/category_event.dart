@@ -9,3 +9,5 @@ class CategorySearchEvent extends CategoryEvent {
   final String params;
   CategorySearchEvent({required this.params});
 }
+
+class CategoryRefreshEvent extends CategoryEvent {}

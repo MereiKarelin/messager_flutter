@@ -3,8 +3,13 @@ String formatDateTime(int timestamp) {
   DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
 
   Duration difference = now.difference(dateTime);
-
-  if (difference.inHours == 1) {
+  if (difference.inHours == 0 && difference.inMinutes <= 1) {
+    return 'только что';
+  } else if (difference.inHours == 0 &&
+      difference.inMinutes > 1 &&
+      difference.inMinutes <= 59) {
+    return "${difference.inMinutes} минуты назад";
+  } else if (difference.inHours == 1) {
     return "час назад";
   } else if (difference.inHours > 1 && difference.inHours <= 23) {
     return "${difference.inHours} часа назад";

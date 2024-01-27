@@ -19,6 +19,31 @@ void main() {
             1000),
         "час назад");
 
+    // Test case: только что
+
+    expect(
+        formatDateTime(DateTime.now()
+                .subtract(const Duration(minutes: 1))
+                .millisecondsSinceEpoch ~/
+            1000),
+        "только что");
+
+    expect(
+        formatDateTime(DateTime.now()
+                .subtract(const Duration(milliseconds: 43))
+                .millisecondsSinceEpoch ~/
+            1000),
+        "только что");
+
+    // Test case: 45 минуту назад
+
+    expect(
+        formatDateTime(DateTime.now()
+                .subtract(const Duration(minutes: 45))
+                .millisecondsSinceEpoch ~/
+            1000),
+        "45 минуты назад");
+
     // Test case: 2 часа назад
     expect(
         formatDateTime(DateTime.now()
@@ -45,9 +70,11 @@ void main() {
 
     // Test case: Другая дата
     expect(
-        formatDateTime(DateTime.now()
-                .subtract(const Duration(days: 5))
-                .millisecondsSinceEpoch ~/
+        formatDateTime(DateTime(
+              2024,
+              1,
+              19,
+            ).millisecondsSinceEpoch ~/
             1000),
         "19.01.2024");
   });

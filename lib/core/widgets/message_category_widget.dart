@@ -24,7 +24,7 @@ class MessageCategoryWidget extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => MessagesView(categorye: categorye)));
-        categoryBloc.add(CategoryStartEvent());
+        categoryBloc.add(CategoryRefreshEvent());
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,

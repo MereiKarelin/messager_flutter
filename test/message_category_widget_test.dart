@@ -9,6 +9,7 @@ import 'package:messager/features/messages/category_list/bloc/category_bloc.dart
 void main() {
   testWidgets('MessageCategoryWidget renders correctly',
       (WidgetTester tester) async {
+    configureDependencies();
     final _categoryBloc = getIt<CategoryBloc>();
     // Create a Categorye instance for testing
     Categorye testCategorye = Categorye(
