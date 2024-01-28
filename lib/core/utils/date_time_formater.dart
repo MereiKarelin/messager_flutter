@@ -1,8 +1,9 @@
 String formatDateTime(int timestamp) {
-  DateTime now = DateTime.now();
+  DateTime now = DateTime.now().copyWith(hour: DateTime.now().hour - 1);
   DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
 
   Duration difference = now.difference(dateTime);
+
   if (difference.inHours == 0 && difference.inMinutes <= 1) {
     return 'только что';
   } else if (difference.inHours == 0 &&

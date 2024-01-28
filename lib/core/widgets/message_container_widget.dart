@@ -33,15 +33,38 @@ class MessageContainerWidget extends StatelessWidget {
                         : const Radius.circular(16))),
             child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: message.data!.length > 35
-                    ? MediaQuery.of(context).size.width / 1.3
-                    : null,
-                child: Text(
-                  softWrap: true,
-                  message.data ?? '',
-                  style: MTextStyles.messageTextStyle,
-                ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  SizedBox(
+                    width: message.data!.length > 35
+                        ? MediaQuery.of(context).size.width / 1.3
+                        : null,
+                    child: Text(
+                      softWrap: true,
+                      message.data ?? '',
+                      style: MTextStyles.messageTextStyle,
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        "${DateTime.fromMillisecondsSinceEpoch(message.dataTime! * 1000).hour + 1}:${DateTime.fromMillisecondsSinceEpoch(message.dataTime! * 1000).minute}",
+                        style: MTextStyles.thirdTextStyle.copyWith(fontSize: 9),
+                      ),
+                      const SizedBox(
+                        width: 3,
+                      ),
+                      const Icon(
+                        Icons.check_sharp,
+                        size: 10,
+                      )
+                    ],
+                  )
+                ],
               ),
             ),
           )

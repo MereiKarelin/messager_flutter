@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:messager/core/injectable/configurator.dart';
-import 'package:messager/core/utils/date_time_formater.dart';
-import 'package:messager/core/utils/m_colors.dart';
 import 'package:messager/core/utils/m_text_styles.dart';
 import 'package:messager/core/utils/route_settings.dart';
 import 'package:messager/core/utils/routes.dart';
@@ -26,7 +24,6 @@ class MessagesView extends StatefulWidget implements Navigable {
 
 class _MessagesViewState extends State<MessagesView> {
   final _messagesBloc = getIt<MessagesBloc>();
-  DateTime dateTime = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
@@ -47,55 +44,10 @@ class _MessagesViewState extends State<MessagesView> {
                   ),
                 child: BlocBuilder<MessagesBloc, MessagesState>(
                     builder: (context, state) => state is MessagesLoadedState
-                        ? ListView.separated(
+                        ? ListView.builder(
                             padding: const EdgeInsets.fromLTRB(16, 16, 16, 120),
-                            itemCount: state.messagesList.messages?.length ?? 0,
+                            itemCount: state.messagesList.messages?.length,
                             reverse: true,
-                            separatorBuilder: (context, index) {
-                              // Деление по времени
-                              final DateTime messageDateTime =
-                                  DateTime.fromMillisecondsSinceEpoch(state
-                                          .messagesList
-                                          .messages?[((state.messagesList
-                                                          .messages?.length ??
-                                                      0) -
-                                                  1) -
-                                              index]
-                                          .dataTime ??
-                                      1600000);
-                              if (index != 0 &&
-                                  dateTime.day < messageDateTime.day) {
-                                dateTime = messageDateTime;
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Container(
-                                      height: 2,
-                                      color: MColors.primaryColor,
-                                    ),
-                                    Text(formatDateTime((state
-                                                .messagesList
-                                                .messages?[((state
-                                                                .messagesList
-                                                                .messages
-                                                                ?.length ??
-                                                            0) -
-                                                        1) -
-                                                    index]
-                                                .dataTime ??
-                                            1600000) ~/
-                                        1000)),
-                                    Container(
-                                      height: 2,
-                                      color: MColors.primaryColor,
-                                    ),
-                                  ],
-                                );
-                              } else {
-                                dateTime = messageDateTime;
-                                return const SizedBox();
-                              }
-                            },
                             itemBuilder: (context, index) =>
                                 MessageContainerWidget(
                               message: state.messagesList.messages?[
