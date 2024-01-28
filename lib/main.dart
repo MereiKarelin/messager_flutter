@@ -7,7 +7,7 @@ import 'package:messager/data/model/response/category_response_model.dart';
 import 'package:messager/features/messages/category_list/category_view.dart';
 import 'package:messager/features/messages/messages_list/messages_view.dart';
 
-//START FOURTH DAT (1 intensive)
+//START FIFTHS DAY
 
 void main() {
   configureDependencies();
