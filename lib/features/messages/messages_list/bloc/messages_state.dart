@@ -9,7 +9,9 @@ class MessagesLoadingState extends MessagesState {}
 
 class MessagesLoadedState extends MessagesState {
   final MessagesModel messagesList;
-  MessagesLoadedState({required this.messagesList});
+  final List<DateTimeModel> dateTimeModel;
+  MessagesLoadedState(
+      {required this.messagesList, required this.dateTimeModel});
 }
 
 class MessagesErrorState extends MessagesState {
