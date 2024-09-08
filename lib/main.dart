@@ -20,11 +20,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        onGenerateRoute: onGenerateRoute,
-        title: 'Messages',
-        theme: MThemeData.getTheme(),
-        home: CategoryView());
+    return MaterialApp(onGenerateRoute: onGenerateRoute, title: 'Messages', theme: MThemeData.getTheme(), home: CategoryView());
   }
 }
 
@@ -34,11 +30,11 @@ Route<dynamic>? onGenerateRoute(RouteSettings settings) {
       return CupertinoPageRoute(
           builder: (_) => MessagesView(
                 categorye: Categorye(),
+                index: 0,
               ),
           settings: settings);
 
     default:
-      return CupertinoPageRoute(
-          builder: (_) => CategoryView(), settings: settings);
+      return CupertinoPageRoute(builder: (_) => CategoryView(), settings: settings);
   }
 }

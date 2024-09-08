@@ -7,8 +7,7 @@ import 'package:messager/data/model/response/category_response_model.dart';
 import 'package:messager/features/messages/category_list/bloc/category_bloc.dart';
 
 void main() {
-  testWidgets('MessageCategoryWidget renders correctly',
-      (WidgetTester tester) async {
+  testWidgets('MessageCategoryWidget renders correctly', (WidgetTester tester) async {
     configureDependencies();
     final _categoryBloc = getIt<CategoryBloc>();
     // Create a Categorye instance for testing
@@ -25,8 +24,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: Scaffold(
-          body: MessageCategoryWidget(
-              categoryBloc: _categoryBloc, categorye: testCategorye),
+          body: MessageCategoryWidget(index: 0, categoryBloc: _categoryBloc, categorye: testCategorye),
         ),
       ),
     );
@@ -46,8 +44,7 @@ void main() {
     }
 
     // Print the actual formatted date.
-    print(
-        'Formatted date: ${formatDateTime(testCategorye.lastMessageDate ?? 0)}');
+    print('Formatted date: ${formatDateTime(testCategorye.lastMessageDate ?? 0)}');
 
     // Check if the formatted date matches the expected format.
     String formattedDate = formatDateTime(testCategorye.lastMessageDate ?? 0);

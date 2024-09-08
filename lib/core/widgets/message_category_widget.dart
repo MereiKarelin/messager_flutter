@@ -7,10 +7,10 @@ import 'package:messager/features/messages/category_list/bloc/category_bloc.dart
 import 'package:messager/features/messages/messages_list/messages_view.dart';
 
 class MessageCategoryWidget extends StatelessWidget {
-  const MessageCategoryWidget(
-      {super.key, required this.categorye, required this.categoryBloc});
+  const MessageCategoryWidget({super.key, required this.categorye, required this.categoryBloc, required this.index});
   final Categorye categorye;
   final CategoryBloc categoryBloc;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
@@ -20,37 +20,21 @@ class MessageCategoryWidget extends StatelessWidget {
       hoverColor: Colors.transparent,
       highlightColor: Colors.transparent,
       onTap: () async {
-        await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MessagesView(categorye: categorye)));
+        await Navigator.push(context, MaterialPageRoute(builder: (context) => MessagesView(categorye: categorye, index: index)));
         categoryBloc.add(CategoryRefreshEvent());
       },
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.symmetric(vertical: 9),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
-                    Container(
-                      height: 50,
-                      width: 50,
-                      decoration: BoxDecoration(
-                        gradient: MColors.orangeLiniarGradient,
-                        borderRadius: BorderRadius.circular(66),
-                      ),
-                      child: Center(
-                        child: Text(
-                          '${categorye.firstname?[0]}${categorye.lastname?[0]}',
-                          style: MTextStyles.whiteLeadingTextStyle,
-                        ),
-                      ),
-                    ),
+                    CircleAvatar(radius: 33, backgroundImage: AssetImage('assets/profiles/$index.jpg')),
                     const SizedBox(
                       width: 10,
                     ),
@@ -58,10 +42,12 @@ class MessageCategoryWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(
-                          "${categorye.firstname} ${categorye.lastname}",
-                          style: MTextStyles.primaryTextStyle,
-                        ),
+                        categorye.lastMessageDate != null
+                            ? Text(
+                                formatDateTime(categorye.lastMessageDate ?? 1600000),
+                                style: MTextStyles.thirdTextStyle,
+                              )
+                            : const SizedBox(),
                         const SizedBox(
                           height: 5,
                         ),
@@ -70,7 +56,7 @@ class MessageCategoryWidget extends StatelessWidget {
                             categorye.lastMessageByMe == 1
                                 ? const Text(
                                     "Вы: ",
-                                    style: MTextStyles.thirdTextStyle,
+                                    style: MTextStyles.secondaryTextStyle,
                                   )
                                 : const SizedBox(),
                             Text(
@@ -84,12 +70,6 @@ class MessageCategoryWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(),
-                categorye.lastMessageDate != null
-                    ? Text(
-                        formatDateTime(categorye.lastMessageDate ?? 1600000),
-                        style: MTextStyles.secondaryTextStyle,
-                      )
-                    : const SizedBox(),
               ],
             ),
           ),
